@@ -1,7 +1,14 @@
-import javax.swing.*;
+// TODO: Crop functionality
+// TODO: Copy / Paste
+
+import com.sun.tools.classfile.StackMap_attribute.stack_map_frame;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
 abstract class MyShape {
     Color color;
@@ -15,11 +22,11 @@ abstract class MyShape {
 
 class MyBrushStroke extends MyShape {
     ArrayList<Point> points = new ArrayList<>();
-    int strokeWidth = 3; // default brush size
+    int brushSize = 3; // default brush size
 
-    public MyBrushStroke(Color color, int strokeWidth) {
+    public MyBrushStroke(Color color, int brushSize) {
         this.color = color;
-        this.strokeWidth = strokeWidth;
+        this.brushSize = brushSize;
     }
 
     public void addPoint(int x, int y) {
@@ -30,7 +37,7 @@ class MyBrushStroke extends MyShape {
     void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(color);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2.setStroke(new BasicStroke(brushSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         for (int i = 1; i < points.size(); i++) {
             Point p1 = points.get(i - 1);
             Point p2 = points.get(i);
@@ -41,7 +48,7 @@ class MyBrushStroke extends MyShape {
     @Override
     boolean contains(int x, int y) {
         for (Point p : points) {
-            if (Math.abs(p.x - x) <= strokeWidth && Math.abs(p.y - y) <= strokeWidth) {
+            if (Math.abs(p.x - x) <= brushSize && Math.abs(p.y - y) <= brushSize) {
                 return true;
             }
         }
@@ -61,7 +68,7 @@ class CanvasPanel extends JPanel implements MouseListener, MouseMotionListener {
     MyBrushStroke currentStroke = null;
     MyShape selectedShape = null;
     int lastX, lastY;
-    Color currentColor = Color.BLACK;
+    Color currentColor = Color.BLACK; // INFO: Brush Color
     String mode = "draw";
     boolean dragging = false;
 
@@ -78,7 +85,7 @@ class CanvasPanel extends JPanel implements MouseListener, MouseMotionListener {
     public CanvasPanel() {
         addMouseListener(this);
         addMouseMotionListener(this);
-        setBackground(Color.WHITE);
+        setBackground(Color.WHITE); // INFO: Background Color
     }
 
     @Override
@@ -206,6 +213,7 @@ public class PaintApp extends JFrame {
                 canvas.setColor(chosen);
         });
 
+        // INFO: Key maps stuffs
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('+'), "increaseBrush");
         canvas.getActionMap().put("increaseBrush", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -234,5 +242,29 @@ public class PaintApp extends JFrame {
 
     public static void main(String[] args) {
         new PaintApp();
+    }
+}
+
+// FIX: Implement stack to undo and redo operaions
+
+// TODO: Make a stack like thing for going back or forward using 'u' or ctrl-z,
+// anything...
+// KeyAdapter k = new KeyAdapter() {
+// KeyEvent e = new KeyEvent(...){
+// if (e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
+// if (e.getKeyCode() == KeyEvent.VK_Z) {
+// return stack_map_frame = -1;
+// }
+// }
+// };
+//
+
+public class KeyEvents extends Frame {
+    private Stack<String> historyStack;
+    private Stack<String> forwardStack;
+
+    public TheKeyMap() {
+        historyStack = new Stack<>();
+        forwardStack = new Stack<>();
     }
 }
