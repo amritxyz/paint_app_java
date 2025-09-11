@@ -185,22 +185,22 @@ public class PaintApp extends JFrame {
         canvas = new CanvasPanel();
 
         JButton biggerBtn = new JButton("Brush +");
-        biggerBtn.addActionListener(e -> canvas.increaseBrushSize());
+        biggerBtn.addActionListener(_ -> canvas.increaseBrushSize());
 
         JButton smallerBtn = new JButton("Brush -");
-        smallerBtn.addActionListener(e -> canvas.decreaseBrushSize());
+        smallerBtn.addActionListener(_ -> canvas.decreaseBrushSize());
 
         JButton drawBtn = new JButton("Draw");
-        drawBtn.addActionListener(e -> canvas.setMode("draw"));
+        drawBtn.addActionListener(_ -> canvas.setMode("draw"));
 
         JButton moveBtn = new JButton("Move");
-        moveBtn.addActionListener(e -> canvas.setMode("move"));
+        moveBtn.addActionListener(_ -> canvas.setMode("move"));
 
         JButton deleteBtn = new JButton("Delete");
-        deleteBtn.addActionListener(e -> canvas.setMode("delete"));
+        deleteBtn.addActionListener(_ -> canvas.setMode("delete"));
 
         JButton colorBtn = new JButton("Color");
-        colorBtn.addActionListener(e -> {
+        colorBtn.addActionListener(_ -> {
             Color chosen = JColorChooser.showDialog(null, "Pick Color", Color.BLACK);
             if (chosen != null)
                 canvas.setColor(chosen);
